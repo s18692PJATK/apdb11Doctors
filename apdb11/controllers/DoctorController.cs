@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace apdb11.controllers
 {
-    [ApiController]
     [Route("api/doctors")]
+    [ApiController]
     public class DoctorController: ControllerBase
     {
         private readonly IDoctorService _service;

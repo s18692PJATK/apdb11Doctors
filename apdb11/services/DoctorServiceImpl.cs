@@ -32,9 +32,11 @@ namespace apdb11.services
             try
             {
                 _context.Update(updatedRequest);
+                _context.SaveChanges();
             }
-            catch(Exception)
+            catch(Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
 
@@ -46,15 +48,11 @@ namespace apdb11.services
         {
             var doctorEntry = _context.Doctors
                 .First(d => d.IdDoctor == request.Id);
-            var updatedDoctor = new Doctor
-            {
-                IdDoctor = doctorEntry.IdDoctor,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                Prescriptions = doctorEntry.Prescriptions
-            };
-            return updatedDoctor;
+            doctorEntry.FirstName = request.FirstName;
+            doctorEntry.LastName = request.LastName;
+            doctorEntry.Email = request.Email;
+
+            return doctorEntry;
         }
 
         public bool DeleteDoctor(int id)
@@ -63,6 +61,7 @@ namespace apdb11.services
             try
             {
                 _context.Doctors.Remove(doctorEntry);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -83,6 +82,7 @@ namespace apdb11.services
             try
             {
                 _context.Doctors.Add(newDoctor);
+                _context.SaveChanges();
             }
             catch (Exception)
             {
@@ -99,13 +99,14 @@ namespace apdb11.services
                 LastName = "Listonosz",
                 Email = "edzio@pedzio.com",
             };
+            _context.Doctors.Add(doctor);
+            _context.SaveChanges();
+
             var doctorEntry = _context.Doctors
                 .Where(d => d.FirstName == doctor.FirstName)
                 .Where(d => d.LastName == doctor.LastName)
                 .First(d => d.Email == doctor.Email);
             
-            _context.Doctors.Add(doctor);
-            _context.SaveChanges();
             var patient = new Patient
             {
                 FirstName = "Arnold",

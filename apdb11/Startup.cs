@@ -27,6 +27,7 @@ namespace apdb11
         {
             services.AddDbContext<DoctorDbContext>(options => options.UseSqlServer(Configuration["connectionStrings:default"]));
             services.AddScoped<IDoctorService, DoctorServiceImpl>();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,11 +38,12 @@ namespace apdb11
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
+                endpoints.MapControllers();
             });
         }
     }
